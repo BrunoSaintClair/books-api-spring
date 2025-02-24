@@ -1,5 +1,6 @@
 package com.api.books_registration.Services;
 
+import com.api.books_registration.DTO.UpdateUserDto;
 import com.api.books_registration.Entities.Book;
 import com.api.books_registration.Exceptions.BookNotFoundException;
 import com.api.books_registration.Repositories.BookRepository;
@@ -22,11 +23,24 @@ public class BookService {
         return repository.save(book);
     }
 
-    public void deleteBook(Long id){
+    public void deleteBookById(Long id){
         if (!repository.existsById(id)) {
             throw new BookNotFoundException(id);
         }
         repository.deleteById(id);
+    }
+
+    public void updateBookById(Long id, UpdateUserDto updateUserDto){
+        Book bookEntity = repository.findById(id).orElse(null);
+        if (bookEntity == null){
+            throw new BookNotFoundException(id);
+        }
+        if (updateUserDto.name() != null){ bookEntity.setName(updateUserDto.name()); }
+        if (updateUserDto.description() != null){ bookEntity.setDescription(updateUserDto.description()); }
+        if (updateUserDto.author() != null){ bookEntity.setAuthor(updateUserDto.author()); }
+        if (updateUserDto.numberOfPages() != null){ bookEntity.setNumberOfPages(updateUserDto.numberOfPages()); }
+
+        repository.save(bookEntity);
     }
 
     public Book getBookById(Long id){

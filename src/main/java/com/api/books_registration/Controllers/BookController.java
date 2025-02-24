@@ -1,5 +1,6 @@
 package com.api.books_registration.Controllers;
 
+import com.api.books_registration.DTO.UpdateUserDto;
 import com.api.books_registration.Entities.Book;
 import com.api.books_registration.Exceptions.BookNotFoundException;
 import com.api.books_registration.Services.BookService;
@@ -29,11 +30,22 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable("id") Long bookId){
+    public ResponseEntity<Void> deleteBookById(@PathVariable("id") Long bookId){
         try {
-            service.deleteBook(bookId);
+            service.deleteBookById(bookId);
             return ResponseEntity.noContent().build();
         } catch (BookNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateBookById(@PathVariable("id") Long bookId,
+                                               @RequestBody UpdateUserDto updateUserDto){
+        try {
+            service.updateBookById(bookId, updateUserDto);
+            return ResponseEntity.noContent().build();
+        } catch (BookNotFoundException e){
             return ResponseEntity.notFound().build();
         }
     }

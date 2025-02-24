@@ -1,6 +1,7 @@
 package com.api.books_registration.Controllers;
 
 import com.api.books_registration.Entities.Book;
+import com.api.books_registration.Exceptions.BookNotFoundException;
 import com.api.books_registration.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +29,10 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteBook(@PathVariable("id") Long bookId){
-        boolean deleted = service.deleteBook(bookId);
-        if (!deleted) {
+    public ResponseEntity<Void> deleteBook(@PathVariable("id") Long bookId){
+        try {
+            service.deleteBook(bookId);
+        } catch (BookNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();

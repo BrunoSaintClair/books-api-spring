@@ -1,6 +1,7 @@
 package com.api.books_registration.Services;
 
 import com.api.books_registration.Entities.Book;
+import com.api.books_registration.Exceptions.BookNotFoundException;
 import com.api.books_registration.Repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,10 @@ public class BookService {
         return repository.save(book);
     }
 
-    public boolean deleteBook(Long id){
+    public void deleteBook(Long id){
         if (!repository.existsById(id)) {
-            return false;
+            throw new BookNotFoundException(id);
         }
         repository.deleteById(id);
-        return true;
     }
 }

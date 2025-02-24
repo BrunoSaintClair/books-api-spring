@@ -32,10 +32,26 @@ public class BookController {
     public ResponseEntity<Void> deleteBook(@PathVariable("id") Long bookId){
         try {
             service.deleteBook(bookId);
+            return ResponseEntity.noContent().build();
         } catch (BookNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable("id") Long bookId){
+        try {
+            Book foundBook = service.getBookById(bookId);
+            return ResponseEntity.ok(foundBook);
+        } catch (BookNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/author/{author}")
+    public List<Book> getBooksByAuthor(@PathVariable("author") String authorName){
+        return service.getBooksByAuthor(authorName);
     }
 
 }
+

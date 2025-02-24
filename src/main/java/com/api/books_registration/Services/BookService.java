@@ -28,4 +28,17 @@ public class BookService {
         }
         repository.deleteById(id);
     }
+
+    public Book getBookById(Long id){
+        Book book = repository.findById(id).orElse(null);
+        if (book == null){
+            throw new BookNotFoundException(id);
+        }
+        return book;
+    }
+
+    public List<Book> getBooksByAuthor(String author){
+        return repository.findBooksByAuthor(author);
+    }
+
 }

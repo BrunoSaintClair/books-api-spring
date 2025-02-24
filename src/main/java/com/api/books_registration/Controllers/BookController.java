@@ -53,5 +53,15 @@ public class BookController {
         return service.getBooksByAuthor(authorName);
     }
 
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Book> getBookByName(@PathVariable("name") String bookName){
+        try {
+            Book foundBook = service.getBookByName(bookName);
+            return ResponseEntity.ok(foundBook);
+        } catch (BookNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
 

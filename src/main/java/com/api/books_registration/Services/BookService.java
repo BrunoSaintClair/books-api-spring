@@ -41,4 +41,11 @@ public class BookService {
         return repository.findBooksByAuthor(author);
     }
 
+    public Book getBookByName(String name){
+        Book book = repository.findBookByName(name);
+        if (book == null){
+            throw new BookNotFoundException();
+        }
+        return book;
+    }
 }

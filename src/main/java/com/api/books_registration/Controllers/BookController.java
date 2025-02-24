@@ -3,10 +3,10 @@ package com.api.books_registration.Controllers;
 import com.api.books_registration.Entities.Book;
 import com.api.books_registration.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,6 +19,12 @@ public class BookController {
     @GetMapping
     public List<Book> getAllBooks(){
         return service.getAllBooks();
+    }
+
+    @PostMapping
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        Book createdBook = service.addBook(book);
+        return ResponseEntity.created(URI.create("api/v1/book/" + createdBook.getId())).body(createdBook);
     }
 
 }

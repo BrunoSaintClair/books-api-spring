@@ -20,4 +20,12 @@ public class BookService {
     public Book addBook(Book book){
         return repository.save(book);
     }
+
+    public boolean deleteBook(Long id){
+        if (!repository.existsById(id)) {
+            return false;
+        }
+        repository.deleteById(id);
+        return true;
+    }
 }

@@ -27,4 +27,13 @@ public class BookController {
         return ResponseEntity.created(URI.create("api/v1/book/" + createdBook.getId())).body(createdBook);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteBook(@PathVariable("id") Long bookId){
+        boolean deleted = service.deleteBook(bookId);
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+
 }

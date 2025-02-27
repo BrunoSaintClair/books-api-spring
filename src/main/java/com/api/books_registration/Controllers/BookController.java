@@ -1,9 +1,10 @@
 package com.api.books_registration.Controllers;
 
-import com.api.books_registration.DTO.UpdateUserDto;
+import com.api.books_registration.DTO.CreateBookDto;
+import com.api.books_registration.DTO.UpdateBookDto;
 import com.api.books_registration.Entities.Book;
-import com.api.books_registration.Exceptions.BookNotFoundException;
 import com.api.books_registration.Services.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,61 +20,43 @@ public class BookController {
     private BookService service;
 
     @GetMapping
-    public List<Book> getAllBooks(){
+    public List<Book> findAll(){
         return service.getAllBooks();
     }
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
-        Book createdBook = service.addBook(book);
+    public ResponseEntity<Book> create(@RequestBody @Valid CreateBookDto createBookDto) {
+        Book createdBook = service.addBook(createBookDto);
         return ResponseEntity.created(URI.create("api/v1/book/" + createdBook.getId())).body(createdBook);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBookById(@PathVariable("id") Long bookId){
-        try {
-            service.deleteBookById(bookId);
-            return ResponseEntity.noContent().build();
-        } catch (BookNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+        service.deleteBookById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateBookById(@PathVariable("id") Long bookId,
-                                               @RequestBody UpdateUserDto updateUserDto){
-        try {
-            service.updateBookById(bookId, updateUserDto);
-            return ResponseEntity.noContent().build();
-        } catch (BookNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Book> update(@PathVariable Long id,
+                                       @RequestBody @Valid UpdateBookDto updateBookDto){
+        Book updatedBook = service.updateBookById(id, updateBookDto);
+        return ResponseEntity.ok(updatedBook);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable("id") Long bookId){
-        try {
-            Book foundBook = service.getBookById(bookId);
-            return ResponseEntity.ok(foundBook);
-        } catch (BookNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Book> findById(@PathVariable Long id){
+        Book foundBook = service.getBookById(id);
+        return ResponseEntity.ok(foundBook);
     }
 
     @GetMapping("/author/{author}")
-    public List<Book> getBooksByAuthor(@PathVariable("author") String authorName){
-        return service.getBooksByAuthor(authorName);
+    public List<Book> findByAuthor(@PathVariable String author){
+        return service.getBooksByAuthor(author);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<Book> getBookByName(@PathVariable("name") String bookName){
-        try {
-            Book foundBook = service.getBookByName(bookName);
-            return ResponseEntity.ok(foundBook);
-        } catch (BookNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Book> findByName(@PathVariable String name){
+        Book foundBook = service.getBookByName(name);
+        return ResponseEntity.ok(foundBook);
     }
-
 }
-

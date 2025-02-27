@@ -2,6 +2,8 @@ package com.api.books_registration.Entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "book")
 public class Book {
@@ -11,6 +13,7 @@ public class Book {
     private String author;
     private String description;
     private Integer numberOfPages;
+    private LocalDateTime createdAt;
 
     public Book(){}
 
@@ -19,6 +22,7 @@ public class Book {
         this.author = author;
         this.description = description;
         this.numberOfPages = numberOfPages;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Integer getNumberOfPages() {
@@ -55,5 +59,9 @@ public class Book {
 
     public Long getId() {
         return id;
+    }
+
+    public LocalDateTime getCreatedAt(){
+        return createdAt;
     }
 }

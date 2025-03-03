@@ -1,5 +1,6 @@
 package com.api.books_registration.DTO;
 
+import com.api.books_registration.Entities.Author;
 import jakarta.validation.constraints.*;
 
 public record CreateBookDto(
@@ -9,9 +10,7 @@ public record CreateBookDto(
         String name,
 
         @NotBlank(message = "Field 'author' can't be empty.")
-        @Size(max = 255, message = "Field 'author' must be at most 255 characters.")
-        @Pattern(regexp = "^[a-zA-Z ]+$", message = "Field 'author' must contain only letters and spaces.")
-        String author,
+        Author author,
 
         @NotBlank(message = "Field 'description' can't be empty.")
         @Size(max = 255, message = "Field 'description' must be at most 255 characters.")

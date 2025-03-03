@@ -1,6 +1,7 @@
 package com.api.books_registration.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -10,14 +11,15 @@ public class Book {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String author;
+    @ManyToOne @JoinColumn(name = "author_id")
+    private Author author;
     private String description;
     private Integer numberOfPages;
     private LocalDateTime createdAt;
 
     public Book(){}
 
-    public Book(String name, String author, String description, Integer numberOfPages) {
+    public Book(String name, Author author, String description, Integer numberOfPages) {
         this.name = name;
         this.author = author;
         this.description = description;
@@ -41,11 +43,11 @@ public class Book {
         this.description = description;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
@@ -64,4 +66,5 @@ public class Book {
     public LocalDateTime getCreatedAt(){
         return createdAt;
     }
+
 }

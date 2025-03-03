@@ -2,9 +2,12 @@ package com.api.books_registration.Services;
 
 import com.api.books_registration.DTO.CreateBookDto;
 import com.api.books_registration.DTO.UpdateBookDto;
+import com.api.books_registration.Entities.Author;
 import com.api.books_registration.Entities.Book;
+import com.api.books_registration.Exceptions.AuthorNotFoundException;
 import com.api.books_registration.Exceptions.BookNotFoundException;
 import com.api.books_registration.Exceptions.InvalidFieldException;
+import com.api.books_registration.Repositories.AuthorRepository;
 import com.api.books_registration.Repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,9 @@ public class BookService {
     @Autowired
     private BookRepository repository;
 
+    @Autowired
+    private AuthorRepository authorRepository;
+
     public List<Book> getAllBooks(){
         return repository.findAll();
     }
@@ -26,9 +32,19 @@ public class BookService {
             throw new InvalidFieldException("Book's name must be UNIQUE.");
         }
 
+        Author author = createBookDto.author();
+
+        if (!authorRepository.existsById(author.getId())){
+            throw new AuthorNotFoundException(author.getId());
+        }
+
+        if (authorRepository.findAuthorByName(author.getName()) == null){
+            throw new AuthorNotFoundException("Author with name '" + author.getName() + "' not found.");
+        }
+
         Book book = new Book(
                 createBookDto.name().trim(),
-                createBookDto.author().trim(),
+                author,
                 createBookDto.description().trim(),
                 createBookDto.numberOfPages()
         );
@@ -59,7 +75,7 @@ public class BookService {
             bookEntity.setDescription(updateBookDto.description().trim());
         }
         if (updateBookDto.author() != null) {
-            bookEntity.setAuthor(updateBookDto.author().trim());
+            bookEntity.setAuthor(updateBookDto.author());
         }
         if (updateBookDto.numberOfPages() != null) {
             bookEntity.setNumberOfPages(updateBookDto.numberOfPages());
@@ -71,10 +87,6 @@ public class BookService {
     public Book getBookById(Long id){
         return repository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
-    }
-
-    public List<Book> getBooksByAuthor(String author){
-        return repository.findBooksByAuthor(author);
     }
 
     public Book getBookByName(String name){

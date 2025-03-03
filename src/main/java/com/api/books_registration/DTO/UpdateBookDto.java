@@ -1,5 +1,6 @@
 package com.api.books_registration.DTO;
 
+import com.api.books_registration.Entities.Author;
 import jakarta.validation.constraints.*;
 
 public record UpdateBookDto(
@@ -7,9 +8,7 @@ public record UpdateBookDto(
         @Pattern(regexp = "^[a-zA-Z0-9 ]+$", message = "Field 'name' contains invalid characters.")
         String name,
 
-        @Size(max = 255, message = "Field 'author' must be at most 255 characters.")
-        @Pattern(regexp = "^[a-zA-Z ]+$", message = "Field 'author' must contain only letters and spaces.")
-        String author,
+        Author author,
 
         @Size(max = 255, message = "Field 'description' must be at most 255 characters.")
         String description,

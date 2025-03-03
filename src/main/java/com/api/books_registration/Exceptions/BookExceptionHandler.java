@@ -21,4 +21,10 @@ public class BookExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(AuthorNotFoundException.class)
+    private ResponseEntity<ErrorResponse> authorNotFoundException(AuthorNotFoundException exception){
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
 }

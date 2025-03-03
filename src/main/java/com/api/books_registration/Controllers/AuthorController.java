@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/author")
@@ -46,9 +45,8 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}/books")
-    public Set<Book> getBooks(@PathVariable("id") Long id){
-        Set<Book> books = service.getBooksByAuthorId(id);
-        return books;
+    public List<Book> getBooks(@PathVariable("id") Long id){
+        return service.getBooksByAuthorId(id);
     }
 
     @GetMapping("/{id}")

@@ -10,6 +10,7 @@ import com.api.books_registration.Repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ public class AuthorService {
         return authorEntity;
     }
 
-    public Set<Book> getBooksByAuthorId(Long id) {
+    public List<Book> getBooksByAuthorId(Long id) {
         if (!repository.existsById(id)){ throw new AuthorNotFoundException(id); }
         Author author = repository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
         return author.getBooksList();

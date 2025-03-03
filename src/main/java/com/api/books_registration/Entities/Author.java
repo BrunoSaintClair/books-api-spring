@@ -3,8 +3,8 @@ package com.api.books_registration.Entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "author")
@@ -15,7 +15,7 @@ public class Author {
     private String name;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private Set<Book> booksList = new HashSet<>();
+    private List<Book> booksList = new ArrayList<>();
 
     public Author() {
     }
@@ -24,7 +24,7 @@ public class Author {
         this.name = name;
     }
 
-    public Author(String name, Set<Book> booksList) {
+    public Author(String name, List<Book> booksList) {
         this.name = name;
         this.booksList = booksList;
     }
@@ -41,11 +41,11 @@ public class Author {
         this.name = name;
     }
 
-    public Set<Book> getBooksList() {
+    public List<Book> getBooksList() {
         return booksList;
     }
 
-    public void setBooksList(Set<Book> booksList) {
+    public void setBooksList(List<Book> booksList) {
         this.booksList = booksList;
     }
 }

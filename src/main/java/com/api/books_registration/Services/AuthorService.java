@@ -10,9 +10,8 @@ import com.api.books_registration.Repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class AuthorService {
@@ -40,6 +39,17 @@ public class AuthorService {
         if (!repository.existsById(id)){
             throw new AuthorNotFoundException(id);
         }
+
+        Optional <Author> author = repository.findById(id);
+
+        if (author.isPresent()){
+            if (!author.get().getBooksList().isEmpty()) {
+                throw new InvalidFieldException("Cannot delete an author with associated books.");
+            }
+        } else {
+            throw new AuthorNotFoundException(id);
+        }
+
         repository.deleteById(id);
     }
 
